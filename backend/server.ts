@@ -23,6 +23,11 @@ app.get("/", (request: Request, response: Response) => {
 
 io.on("connection", (socket) => {
   console.log(`${socket.id} just connected`)
+
+  socket.on("chatMessage", (message) => {
+    console.log("Message received:", message)
+  })
+
   socket.on("disconnect", () => {
     console.log(`${socket.id} just disconnected`)
   })

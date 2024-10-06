@@ -30,7 +30,9 @@ const ChatSidebar = () => {
       </div>
 
       {/* Chats List */}
-      <div className="mt-4 space-y-4">
+      <div className="mt-4 space-y-4 overflow-y-auto h-[calc(100vh-200px)]">
+        {" "}
+        {/* Adjust height as needed */}
         <div className="p-3 bg-gray-700 rounded-md flex items-center cursor-pointer hover:bg-gray-600">
           <div className="w-10 h-10 rounded-full bg-gray-500 mr-4"></div>
           <div>
@@ -39,6 +41,22 @@ const ChatSidebar = () => {
           </div>
         </div>
         {/* Add more chat items here */}
+        {/* Example additional items */}
+        <div className="p-3 bg-gray-700 rounded-md flex items-center cursor-pointer hover:bg-gray-600">
+          <div className="w-10 h-10 rounded-full bg-gray-500 mr-4"></div>
+          <div>
+            <p className="font-medium">Jane Smith</p>
+            <p className="text-sm text-gray-400">Let’s meet tomorrow.</p>
+          </div>
+        </div>
+        <div className="p-3 bg-gray-700 rounded-md flex items-center cursor-pointer hover:bg-gray-600">
+          <div className="w-10 h-10 rounded-full bg-gray-500 mr-4"></div>
+          <div>
+            <p className="font-medium">Alice Johnson</p>
+            <p className="text-sm text-gray-400">Can you send me the files?</p>
+          </div>
+        </div>
+        {/* You can add more items similarly */}
       </div>
     </div>
   )
