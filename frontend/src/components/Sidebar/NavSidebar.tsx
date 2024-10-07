@@ -1,10 +1,9 @@
-import React from "react"
 import { FiMessageSquare, FiUsers, FiSettings } from "react-icons/fi"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const NavSidebar = () => {
   return (
-    <div className="w-16 bg-gray-900 flex flex-col items-center p-2 space-y-4 h-screen relative">
+    <div className="w-16 bg-gray-800 flex flex-col items-center p-2 space-y-4 h-screen relative">
       <div className="text-green-400">
         <FiMessageSquare size={24} />
       </div>

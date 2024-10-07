@@ -23,9 +23,9 @@ app.get("/", (request: Request, response: Response) => {
 
 io.on("connection", (socket) => {
   console.log(`${socket.id} just connected`)
-
   socket.on("chatMessage", (message) => {
     console.log("Message received:", message)
+    socket.broadcast.emit("showMessage", message)
   })
 
   socket.on("disconnect", () => {
