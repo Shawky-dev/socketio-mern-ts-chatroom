@@ -1,14 +1,15 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Send } from "lucide-react"
 
-import io from "socket.io-client"
 import Message from "./Message"
+
+import io from "socket.io-client"
 const socket = io("http://localhost:3000")
 
-type messge = {
+type message = {
   incoming: boolean
   text: string
 }
@@ -16,12 +17,26 @@ type messge = {
 type Props = {}
 
 export default function Chatarea({}: Props) {
-  const [messages, setMessages] = useState<messge[]>([
-    { incoming: true, text: "1" },
-    { incoming: false, text: "2" },
-    { incoming: true, text: "3" },
-    { incoming: false, text: "4" },
-  ])
+  const [text, setText] = useState<string>("")
+  const [messages, setMessages] = useState<message[]>([])
+  useEffect(() => {
+    socket.on("showMessage", (msg: string) => {
+      setMessages([...messages, { incoming: true, text: msg }])
+    })
+
+    return () => {
+      socket.off("showMessage")
+    }
+  }, [messages])
+
+  const sendMessage = () => {
+    if (text.trim()) {
+      socket.emit("chatMessage", text)
+      setMessages([...messages, { incoming: false, text: text }])
+      setText("")
+    }
+  }
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white p-4 shadow">
@@ -35,10 +50,15 @@ export default function Chatarea({}: Props) {
       <div className="bg-white p-4 border-t flex">
         <Input
           type="text"
+          value={text}
           placeholder="Type a message..."
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") sendMessage()
+          }}
           className="flex-1 mr-2"
         />
-        <Button type="submit">
+        <Button onClick={sendMessage}>
           <Send className="h-4 w-4 mr-2" />
           Send
         </Button>
