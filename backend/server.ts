@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import http from "http"
 import { Server } from "socket.io"
 import cors from "cors"
+import userAuth from "./routes/user.auth"
 
 dotenv.config()
 const app = express()
@@ -15,11 +16,11 @@ const io = new Server(server, {
 })
 const PORT = process.env.PORT
 
+//Middleware__
 app.use(cors())
-
-app.get("/", (request: Request, response: Response) => {
-  response.status(200).send("Hello World")
-})
+app.use(express.json())
+//Routes
+app.use("/auth", userAuth)
 
 io.on("connection", (socket) => {
   console.log(`${socket.id} just connected`)
