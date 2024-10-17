@@ -36,10 +36,6 @@ export default function SmallSidebar({}: Props) {
   return (
     <div className="w-20 bg-gray-900 p-3 flex flex-col items-center justify-between">
       <div className="space-y-4">
-        <Avatar className="w-10 h-10">
-          <AvatarImage src="/placeholder-user.jpg" alt="@yourusername" />
-          <AvatarFallback>YU</AvatarFallback>
-        </Avatar>
         <Button
           variant="ghost"
           size="icon"
@@ -85,6 +81,10 @@ export default function SmallSidebar({}: Props) {
         >
           <LogOut size={24} />
         </Button>
+        <Avatar className="w-10 h-10">
+          <AvatarImage src="/placeholder-user.jpg" alt="@yourusername" />
+          <AvatarFallback>YU</AvatarFallback>
+        </Avatar>
       </div>
     </div>
   )
