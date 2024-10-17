@@ -1,0 +1,2 @@
+1.add express-async-erros to not have the server crash from stuff
+https://stackoverflow.com/questions/66588099/jsonwebtoken-jwt-crashing-my-app-when-invalid-token-is-provided-even-though-err

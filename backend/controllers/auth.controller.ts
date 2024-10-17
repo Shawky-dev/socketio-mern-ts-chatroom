@@ -81,6 +81,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         password: null,
       },
     })
+    console.log(res)
   } catch (error) {}
 }
 export const logout = async (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
-import { useState } from "react"
-import div, { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import div, { Link, useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Search,
 } from "lucide-react"
+import axiosInstance from "../api/axiosConfig"
 
 const groups = [
   {
@@ -57,6 +58,32 @@ const groups = [
 ]
 
 export default function LandingPage() {
+  const navigate = useNavigate()
+
+  // Check if the user is authenticated
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "http://localhost:3000/auth/check-auth",
+          {
+            withCredentials: true, // to include cookies in the request
+          }
+        )
+
+        if (response.data.success) {
+          // If the user is authenticated, redirect to /chat
+          navigate("/chat")
+        }
+      } catch (error) {
+        console.error("User is not authenticated:", error)
+        // If there's an error (e.g., token invalid), the user stays on the home page
+      }
+    }
+
+    checkAuth()
+  }, [navigate])
+
   const [currentGroup, setCurrentGroup] = useState(0)
   const [searchTerm, setSearchTerm] = useState("")
 

@@ -2,12 +2,13 @@ import React, { useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axiosInstance from "@/api/axiosConfig"
 
 type Props = {}
 
 export default function SignUp({}: Props) {
+  const navigate = useNavigate()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -31,6 +32,7 @@ export default function SignUp({}: Props) {
 
       console.log(response.data) // Handle response data
       // You can redirect or show a success message here
+      navigate("/chat")
     } catch (err) {
       setError("Failed to sign up. Please try again.")
       console.error(err)

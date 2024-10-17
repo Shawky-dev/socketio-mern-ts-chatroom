@@ -1,13 +1,41 @@
+import React, { useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import axiosInstance from "@/api/axiosConfig"
+
 export default function Login() {
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev)
+  }
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setError(null)
+
+    try {
+      const response = await axiosInstance.post(
+        "http://localhost:3000/auth/login",
+        {
+          email,
+          password,
+        }
+      )
+
+      console.log(response) // Handle response data
+      // You can redirect or show a success message here
+      navigate("/chat")
+    } catch (err) {
+      setError("Failed to login. Please try again.")
+      console.error(err)
+    }
   }
 
   return (
@@ -19,7 +47,7 @@ export default function Login() {
             Enter your credentials to access your account
           </p>
         </div>
-        <div>
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -27,6 +55,8 @@ export default function Login() {
                 id="email"
                 type="email"
                 placeholder="yourname@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -36,6 +66,8 @@ export default function Login() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <button
@@ -50,16 +82,17 @@ export default function Login() {
             <Button type="submit" className="w-full">
               Login
             </Button>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
-          <div className="mt-4 text-center text-sm">
-            Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-            >
-              Sign Up
-            </Link>
-          </div>
+        </form>
+        <div className="mt-4 text-center text-sm">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          >
+            Sign Up
+          </Link>
         </div>
       </div>
     </div>

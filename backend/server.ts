@@ -31,14 +31,14 @@ app.use(cookieParser())
 app.use("/auth", userAuth)
 
 io.on("connection", (socket) => {
-  console.log(`${socket.id} just connected`)
+  //console.log(`${socket.id} just connected`)
   socket.on("chatMessage", (message) => {
     console.log("Message received:", message)
     socket.broadcast.emit("showMessage", message)
   })
 
   socket.on("disconnect", () => {
-    console.log(`${socket.id} just disconnected`)
+    //console.log(`${socket.id} just disconnected`)
   })
 })
 
