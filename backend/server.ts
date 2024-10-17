@@ -3,8 +3,10 @@ import dotenv from "dotenv"
 import http from "http"
 import { Server } from "socket.io"
 import cors from "cors"
+import cookieParser from "cookie-parser"
+//___Import Functions
+import connectDB from "./config/dbConfing"
 import userAuth from "./routes/user.auth"
-
 dotenv.config()
 const app = express()
 const server = http.createServer(app)
@@ -17,8 +19,14 @@ const io = new Server(server, {
 const PORT = process.env.PORT
 
 //Middleware__
-app.use(cors())
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+)
 app.use(express.json())
+app.use(cookieParser())
 //Routes
 app.use("/auth", userAuth)
 
@@ -37,6 +45,7 @@ io.on("connection", (socket) => {
 server
   .listen(PORT, () => {
     console.log("Server running at PORT: ", PORT)
+    connectDB()
   })
   .on("error", (error) => {
     throw new Error(error.message)

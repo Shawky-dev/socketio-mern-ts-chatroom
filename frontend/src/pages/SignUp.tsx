@@ -3,13 +3,38 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import axiosInstance from "@/api/axiosConfig"
+
 type Props = {}
 
 export default function SignUp({}: Props) {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev)
+  }
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setError(null)
+
+    try {
+      const response = await axiosInstance.post("/auth/signup", {
+        email,
+        name,
+        password,
+      })
+
+      console.log(response.data) // Handle response data
+      // You can redirect or show a success message here
+    } catch (err) {
+      setError("Failed to sign up. Please try again.")
+      console.error(err)
+    }
   }
 
   return (
@@ -21,11 +46,17 @@ export default function SignUp({}: Props) {
             Enter your details to create a new account
           </p>
         </div>
-        <div>
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Your Name" required />
+              <Input
+                id="name"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -33,6 +64,8 @@ export default function SignUp({}: Props) {
                 id="email"
                 type="email"
                 placeholder="yourname@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -42,6 +75,8 @@ export default function SignUp({}: Props) {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <button
@@ -56,16 +91,17 @@ export default function SignUp({}: Props) {
             <Button type="submit" className="w-full">
               Sign Up
             </Button>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
-          <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-            >
-              Login
-            </Link>
-          </div>
+        </form>
+        <div className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          >
+            Login
+          </Link>
         </div>
       </div>
     </div>
